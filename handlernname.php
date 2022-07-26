@@ -9,39 +9,30 @@
 <body>
 	<table border='1'>
 	<tr>
-		<th>shift</th>
-		<th>date</th>
-		<th>departnum</th>
 		<th>nursename</th>
 		<th>ward</th>
 	</tr>
 	<h4>Інформація про дежурства обраної медсестри:</h4>
 	<?php
 		include("connection.php");
-		if(isset($_GET["departnum"]) AND
-			isset($_GET["shiftname"]))
+		if(isset($_GET["nursename"]))
 		{
 			
-			$departnum=$_GET["departnum"];
-			$shiftname=$_GET["shiftname"];
+			$nursename=$_GET["nursename"];
 			try
 			{
 				$cursor = $duty->find(
 				[
-					'shift' => $shiftname,
-					'department' => $departnum
+					'nursename' => $nursename,
 				],
 				[
-					'projection' => ['_id'=>0, 'date' => 1, 'nursename' => 1, 'ward' => 1]
+					'projection' => ['_id'=>0, 'ward' => 1]
 				])
 				foreach($cursor as $doc)
 				{
-					$shiftname = $doc['shift'];
-					$date = $doc['date'];
-					$departnum = $doc['department'];
 					$nursename = $doc['nursename'];
 					$ward = $doc['ward'];
-					print"<tr> <td>$shiftname</td> <td>$date</td> <td>$departnum</td> <td>$nursename</td> <td>$ward</td> </tr>";
+					print"<tr> <td>$nursename</td> <td>$ward</td> </tr>";
 				}
 			}
 			catch(MongoException $e)

@@ -21,8 +21,12 @@
 			$departnum=$_GET["departnum"];
 			try
 			{
-				$cursor = $duty->find([],[
-						'projection' => ['_id'=>0, 'department' => $departnum, 'nursename' => 1]
+				$cursor = $duty->find(
+				[
+					'department' => $departnum,
+				],
+				[
+					'projection' => ['_id'=>0, 'nursename' => 1]
 				])
 				foreach($cursor as $doc)
 				{
