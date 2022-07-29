@@ -7,49 +7,21 @@
 <head>
 
 <body>
-	<table border='1'>
-	<tr>
-		<th>shift</th>
-		<th>date</th>
-		<th>departnum</th>
-		<th>nursename</th>
-		<th>ward</th>
-	</tr>
-	<h4>Інформація про дежурства обраної медсестри:</h4>
 	<?php
-		include("connection.php");
-		if(isset($_GET["departnum"]) AND
-			isset($_GET["shiftname"]))
-		{
-			
-			$departnum=$_GET["departnum"];
-			$shiftname=$_GET["shiftname"];
-			try
-			{
-				$cursor = $duty->find(
-				[
-					'shift' => $shiftname,
-					'department' => $departnum
-				],
-				[
-					'projection' => ['_id'=>0, 'date' => 1, 'nursename' => 1, 'ward' => 1]
-				])
-				foreach($cursor as $doc)
-				{
-					$shiftname = $doc['shift'];
-					$date = $doc['date'];
-					$departnum = $doc['department'];
-					$nursename = $doc['nursename'];
-					$ward = $doc['ward'];
-					print"<tr> <td>$shiftname</td> <td>$date</td> <td>$departnum</td> <td>$nursename</td> <td>$ward</td> </tr>";
-				}
-			}
-			catch(MongoException $e)
-			{
-				print "Error: ".$e->getMessage()."<br>";
-				reset();
-			}
-		}
-	?>
+    include "connection.php";
+    $departnum=$_GET["departnum"];
+	$shiftname=$_GET["shiftname"];
+    $key = $departnum . $shiftname;
+    $cursor = $game->find(['shift'=>$shiftname, 'department'=>$departnum]);
+    $value =  "<table border =1><tr><th>shift</th><th>date</th><th>department</th><th>nursename</th><th>ward</th></tr>";
+    foreach ($cursor as $document){
+        $ward = $document['ward'];
+		$nursename =$document['nursename'];
+		$date=$document['date'];
+       $value .= "<tr><td>$shift</td><td>$date</td><td>$department</td><td>$nursename</td><td>$ward</td></tr>";
+    }
+    echo $value;
+    echo "<script> localStorage.setItem('$key', '$value'); </script>"
+    ?>
 </body>
 </html>

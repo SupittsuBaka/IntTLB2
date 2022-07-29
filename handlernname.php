@@ -3,44 +3,22 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial+scale=1.0">
-	<title>ShmidtLB1</title>
+	<title>ShmidtLB2</title>
 <head>
-
 <body>
-	<table border='1'>
-	<tr>
-		<th>nursename</th>
-		<th>ward</th>
-	</tr>
-	<h4>Інформація про дежурства обраної медсестри:</h4>
+	<h4>Інформація про чергування обраної медсестри:</h4>
 	<?php
-		include("connection.php");
-		if(isset($_GET["nursename"]))
-		{
-			
-			$nursename=$_GET["nursename"];
-			try
-			{
-				$cursor = $duty->find(
-				[
-					'nursename' => $nursename,
-				],
-				[
-					'projection' => ['_id'=>0, 'ward' => 1]
-				])
-				foreach($cursor as $doc)
-				{
-					$nursename = $doc['nursename'];
-					$ward = $doc['ward'];
-					print"<tr> <td>$nursename</td> <td>$ward</td> </tr>";
-				}
-			}
-			catch(MongoException $e)
-			{
-				print "Error: ".$e->getMessage()."<br>";
-				reset();
-			}
-		}
-	?>
+    include "connection.php";
+    $nursename = $_GET['nursename'];
+    $key = $nursename;
+    $cursor = $game->find(['nursename'=>$nursename]);
+    $value =  "<table border =1><tr><th>Nursename</th><th>Ward</th></tr>";
+    foreach ($cursor as $document){
+        $ward = $document['ward'];
+       $value .= "<tr><td>$nursename</td><td>$ward</td></tr>";
+    }
+    echo $value;
+    echo "<script> localStorage.setItem('$key', '$value'); </script>"
+    ?>
 </body>
 </html>
